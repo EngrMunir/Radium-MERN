@@ -1,44 +1,38 @@
-import { Layout, Menu, MenuProps } from 'antd';
+import { Layout } from 'antd';
+import {  Outlet } from 'react-router-dom';
+import Sidebar from './Sidebar';
 
-const { Header, Content, Footer, Sider } = Layout;
+const { Header, Content } = Layout;
 
-const items: MenuProps["items"] = [
-    {
-        key:'1',
-        label:"Dashboard",
-    },
-    {
-        key:'2',
-        label:"Profile",
-    },
-    {
-        key:'3',
-        label:"User Management",
-        children:[
-            {
-                key:'11',
-                label:"Create Admin"
-            },
-            {
-                key:'12',
-                label:'Create User'
-            }
-        ]
-    },
-];
+// const items: MenuProps["items"] = [
+//     {
+//         key:'Dashboard',
+//         label:<NavLink to="/admin/dashboard">Dashboard</NavLink>,
+//     },
+//     {
+//         key:'User Management',
+//         label:"User Management",
+//         children:[
+//             {
+//                 key:'Create Admin',
+//                 label:<NavLink to='/admin/create-admin'>Create Admin</NavLink>
+//             },
+//             {
+//               key:'Create Student',
+//               label:<NavLink to='/admin/create-faculty'>Create Faculty</NavLink>
+//           },
+//           {
+//             key:'Create Faculty',
+//             label:<NavLink to='/admin/create-student'>Create Student</NavLink>
+//         },
+//         ]
+//     },
+// ];
 
 const MainLayout = () => {
     return (
         <Layout style={{height:'100vh'}}>
-        <Sider
-          breakpoint="lg"
-          collapsedWidth="0"
-        >
-          <div style={{color:'white', textAlign:'center', height:'3rem', display:"flex", justifyContent:"center", justifyItems:"center"}}>
-            <h1 style={{height:'100%'}}>Radium</h1>
-          </div>
-          <Menu theme="dark" mode="inline" defaultSelectedKeys={['4']} items={items} />
-        </Sider>
+          <Sidebar/>
         <Layout>
           <Header style={{ padding: 0 }} />
           <Content style={{ margin: '24px 16px 0' }}>
@@ -48,7 +42,7 @@ const MainLayout = () => {
                 minHeight: 360,
               }}
             >
-              <h1>The main content should go here</h1>
+              <Outlet/>
             </div>
           </Content>
         </Layout>

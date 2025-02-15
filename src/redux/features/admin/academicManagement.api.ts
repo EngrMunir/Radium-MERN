@@ -1,3 +1,4 @@
+import { data } from "react-router-dom";
 import { baseApi } from "../../api/baseApi";
 
 const academicManagementApi = baseApi.injectEndpoints({
@@ -7,6 +8,13 @@ const academicManagementApi = baseApi.injectEndpoints({
                 url:'/academic-semesters',
                 method:'GET',
             }),
+            transformResponse:(response)=>{
+                console.log("inside return", response);
+                return {
+                    data: response.data,
+                    meta:response.meta,
+                };
+            }
         }),
         addAcademicSemesters: builder.mutation({
             query:(data)=>({

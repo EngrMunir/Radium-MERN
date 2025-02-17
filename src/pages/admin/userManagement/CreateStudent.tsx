@@ -4,21 +4,42 @@ import PHInput from "../../../components/form/PHInput";
 import { Button, Col, Divider, Row } from "antd";
 import PHSelect from "../../../components/form/PHSelect";
 import { bloodGroupOptions, genderOptions } from "../../../components/constants/global";
+import PHDatePicker from "../../../components/form/PHDatePicker";
+import { useGetAcademicDepartmentsQuery, useGetAllSemestersQuery } from "../../../redux/features/admin/academicManagement.api";
+import { useAddStudentMutation } from "../../../redux/features/admin/userManagement.api";
 
 const studentData = [1,2,3,4];
 
 const CreateStudent = () => {
+
+    const [addStudent, {data, error}] = useAddStudentMutation();
+
+    console.log(data, error);
+
+    const { data:sData, isLoading: sIsLoading }= useGetAllSemestersQuery(undefined);
+    const { data:dData, isLoading: dIsLoading }= useGetAcademicDepartmentsQuery(undefined, {skip:sIsLoading});
+
+    const semesterOptions = sData?.data?.map((item) => ({
+        value: item._id,
+        label:`${item.name} ${item.year}`,
+    }))
+
     const onSubmit:SubmitHandler<FieldValues> = (data) =>{
-        console.log(data);
+        const studentData ={
+            password:'student123',
+            student: data
+        }
 
-        // const formData = new  FormData();
+        const formData = new  FormData();
 
-        // formData.append('data', JSON.stringify(data));
+        formData.append('data', JSON.stringify(studentData));
+
+        addStudent(formData);
 
         // console.log(formData.get('something'));
         // console.log([...formData.entries()]);
         // ! This is for development just for checking
-        // console.log(Object.fromEntries(formData));
+        console.log(Object.fromEntries(formData));
     }
     return (
         <Row>
@@ -39,7 +60,7 @@ const CreateStudent = () => {
                         <PHSelect options={genderOptions} name="gender" label="Gender"/>
                     </Col>
                     <Col span={24} md={{span:12}} lg={{span:8}}>
-                        <PHInput type="text" name="dateOfBirth" label="Date of birth"/>
+                        <PHDatePicker name="dateOfBirth" label="Date of birth"/>
                     </Col>
                     <Col span={24} md={{span:12}} lg={{span:8}}>
                         <PHSelect options={bloodGroupOptions} name="bloodGroup" label="Blood Group"/>
@@ -103,6 +124,15 @@ const CreateStudent = () => {
                     </Col>
                     <Col span={24} md={{span:12}} lg={{span:8}}>
                         <PHSelect options={bloodGroupOptions} name="bloodGroup" label="Blood Group"/>
+                    </Col>
+               </Row>
+                <Divider>Academic Info</Divider>
+               <Row gutter={8}>
+                    <Col span={24} md={{span:12}} lg={{span:8}}>
+                        <PHSelect disabled={sIsLoading} options={semesterOptions} name="admissionSemester" label="Admission Semester"/>
+                    </Col>
+                    <Col span={24} md={{span:12}} lg={{span:8}}>
+                        <PHSelect disabled={dIsLoading} options={} name="academicDepartment" label="Admission Department"/>
                     </Col>
                </Row>
                 <Button htmlType="submit">Submit</Button>

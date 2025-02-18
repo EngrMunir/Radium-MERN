@@ -1,5 +1,5 @@
 import { Form, Select } from "antd";
-import { Controller } from "react-hook-form";
+import { Controller, useFormContext, useWatch } from "react-hook-form";
 
 type TPHSelectProps = {
     label:string;
@@ -10,6 +10,14 @@ type TPHSelectProps = {
 }
 
 const PHSelect = ({label, name, options, disabled, mode }:TPHSelectProps) => {
+
+    const {control} = useFormContext();
+    const inputValue = useWatch({
+        control,
+        name,
+    });
+
+    console.log(inputValue);
 
     return (
         <Controller 
